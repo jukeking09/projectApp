@@ -2,17 +2,22 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:register_login/login_page.dart';
 import 'package:register_login/api.dart';
+import 'package:register_login/splash.dart';
+import 'package:register_login/home.dart';
 
 void main() {
   runApp(MaterialApp(
     title: 'Flutter Demo',
     theme: ThemeData(
       primarySwatch: Colors.red,
+      scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255), // Change scaffold background color to red
     ),
-    initialRoute: '/',
+    initialRoute: '/splashscreen',
     routes: {
-      '/': (context) => const Register(),
+      '/': (context) => SplashScreen(),
+      '/register': (context) => const Register(),
       '/login': (context) => const Login(),
+      '/home': (context) => HomePage(),
     },
   ));
 }
@@ -28,15 +33,14 @@ class _RegisterState extends State<Register> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  void setData() async {
+  void registerUser() async {
     final email = _emailController.text;
     final password = _passwordController.text;
-    final response = await ApiService.registerUser(email,password, route: '');
-    if(response['status']==200){
+    final response = await ApiService.registerUser(email, password, route: '');
+    if (response['status'] == 200) {
       // ignore: use_build_context_synchronously
       Navigator.pushNamed(context, '/login');
-    }
-    else{
+    } else {
       // ignore: use_build_context_synchronously
       showDialog(
         context: context,
@@ -51,74 +55,91 @@ class _RegisterState extends State<Register> {
               ),
             ],
           );
-          }
-        );
-      }
+        },
+      );
     }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Register'),
-        backgroundColor: Colors.red,
+        backgroundColor: Color.fromARGB(255, 224, 3, 102),
+        elevation: 0, // Remove app bar elevation
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextFormField(
+            const Text(
+              'Register',
+              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              style: const TextStyle(color: Colors.white),
               controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                prefixIcon: Icon(Icons.email),
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Password',
-                prefixIcon: Icon(Icons.lock),
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: setData,
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.red),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+              decoration: InputDecoration(
+                hintText: 'Email',
+                hintStyle: const TextStyle(color: Colors.grey),
+                prefixIcon: const Icon(Icons.email, color: Colors.white),
+                filled: true,
+                fillColor: Color.fromARGB(219, 106, 103, 103), // Change input field color
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: BorderSide.none,
                 ),
-              ),
-              child: const Text(
-                'Register',
-                style: TextStyle(fontSize: 18),
               ),
             ),
             const SizedBox(height: 20),
-            RichText (
-                  text: TextSpan(
-                    text: 'Already a user? Click here to login',
-                    style: const TextStyle(
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        Navigator.pushNamed(context, '/login');
-                      },
-                  ),
+            TextField(
+              style: const TextStyle(color: Colors.white),
+              controller: _passwordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                hintText: 'Password',
+                hintStyle: const TextStyle(color: Colors.grey),
+                prefixIcon: const Icon(Icons.lock, color: Colors.white),
+                filled: true,
+                fillColor: Color.fromARGB(219, 106, 103, 103), // Change input field color
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: BorderSide.none,
+                ),
               ),
-            ]
-          ),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: registerUser,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white, // Change button color
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+              ),
+              child: const Text(
+                'Register',
+                style: TextStyle(fontSize: 18, color: Color.fromARGB(255, 84, 44, 228)),
+              ),
+            ),
+            const SizedBox(height: 20),
+            RichText(
+              text: TextSpan(
+                text: 'Already have an account? Click here to login',
+                style: const TextStyle(color: Colors.grey),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    Navigator.pushNamed(context, '/login');
+                  },
+              ),
+            ),
+          ],
         ),
+      ),
     );
   }
 }
