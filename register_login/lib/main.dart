@@ -7,12 +7,14 @@ import 'package:register_login/home.dart';
 
 void main() {
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     title: 'Flutter Demo',
     theme: ThemeData(
       primarySwatch: Colors.red,
       scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255), // Change scaffold background color to red
     ),
     initialRoute: '/splashscreen',
+    // home: const HomePage(),
     routes: {
       '/': (context) => SplashScreen(),
       '/register': (context) => const Register(),
@@ -65,6 +67,7 @@ class _RegisterState extends State<Register> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('Register'),
         backgroundColor: Color.fromARGB(255, 224, 3, 102),
         elevation: 0, // Remove app bar elevation

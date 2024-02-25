@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:register_login/api.dart';
 import 'package:register_login/tokens.dart';
@@ -49,6 +50,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Color.fromARGB(255, 224, 3, 102),
         elevation: 0,
         title: const Text('Login'),
@@ -69,7 +71,7 @@ class _LoginState extends State<Login> {
               decoration: InputDecoration(
                 hintText: 'Email',
                 hintStyle: const TextStyle(color: Colors.grey),
-                prefixIcon: const Icon(Icons.person, color: Colors.white),
+                prefixIcon: const Icon(Icons.email, color: Colors.white),
                 filled: true,
                 fillColor: Color.fromARGB(219, 106, 103, 103),
                 border: OutlineInputBorder(
@@ -108,6 +110,17 @@ class _LoginState extends State<Login> {
               child: const Text(
                 'Login',
                 style: TextStyle(fontSize: 18),
+              ),
+            ),
+            const SizedBox(height: 20),
+            RichText(
+              text: TextSpan(
+                text: 'Don\'t have an account? Click here to register',
+                style: const TextStyle(color: Colors.grey),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    Navigator.pushNamed(context, '/register');
+                  },
               ),
             ),
           ],
