@@ -13,7 +13,7 @@ class UserDetailsController extends Controller
         }
         else{
             return response()->json([
-                "data" => new UserResource($user),
+                "data" => new UserResource($user),//call UserResource
             ],200);
         }
     }

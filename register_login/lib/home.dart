@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-
-// void main() {
-//   runApp(const MaterialApp(
-//     home: HomePage(),
-//   ));
-// }
+import 'package:register_login/api.dart';
 
 class HomePage extends StatefulWidget { 
   const HomePage({super.key}); 
@@ -15,16 +10,33 @@ class HomePage extends StatefulWidget {
   
 class _HomePageState extends State<HomePage> { 
   int pageIndex = 0; 
+  late int userId;
+  late String email = ''; // Declare email variable
+
+@override
+void initState() {
+  super.initState();
   
-  final pages = [ 
+  // Call getUserDetails function to fetch user details
+  ApiService.getUserDetails(userId).then((userData) {
+    // Extract email from the response
+    email = userData['email'];
+    // Update the state to rebuild the UI with the new email
+    setState(() {});
+  }).catchError((error) {
+    // Handle any errors that occur during the API call
+    print('Error fetching user details: $error');
+  });
+}
+
+  @override 
+  Widget build(BuildContext context) {
+    final pages = [ 
     const Page1(), 
     const Page2(), 
     const Page3(), 
-    const Page4(), 
+    Page4(email: email), 
   ]; 
-  
-  @override 
-  Widget build(BuildContext context) {
     return Scaffold( 
       
       backgroundColor: Color.fromARGB(255, 255, 255, 255), 
@@ -209,24 +221,31 @@ class Page3 extends StatelessWidget {
     ); 
   } 
 } 
+
+class Page4 extends StatelessWidget {
+  // final int userId;
+  final String email;
   
-class Page4 extends StatelessWidget { 
-  const Page4({Key? key}) : super(key: key); 
-  
-  @override 
-  Widget build(BuildContext context) { 
-    return Container( 
-      color: const Color.fromARGB(255, 255, 255, 255), 
-      child: Center( 
-        child: Text( 
-          "Page Number 4", 
-          style: TextStyle( 
-            color: Colors.yellow[900], 
-            fontSize: 45, 
-            fontWeight: FontWeight.w500, 
-          ), 
-        ), 
-      ), 
-    ); 
-  } 
+  // const Page4({Key? key, required this.userId, required this.email});
+  const Page4({Key? key, required this.email});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Center(
+          child: Text('User Details')),
+        automaticallyImplyLeading: false,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Text('User ID: $userId'),
+            Text('Email: $email'),
+          ],
+        ),
+      ),
+    );
+  }
 }
