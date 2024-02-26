@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserDetailsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,11 +19,15 @@ use App\Http\Controllers\AuthController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+//Route For User Details
+Route::get('/details/{id}', [UserDetailsController::class, 'getDetails']);
 
-//Route::group(['prefix' => 'auth'], function () {
+//Routes For User Authentication
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-//});
+
+//Routes For GET Testings
 
 Route::get('/hello', function () {
     return 'Hello There!';

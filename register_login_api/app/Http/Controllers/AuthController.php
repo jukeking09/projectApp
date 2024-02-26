@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User; // Assuming your user model is under App\Models namespace
+use App\Models\User; 
 
 class AuthController extends Controller {
     
