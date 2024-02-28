@@ -6,15 +6,29 @@ use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 class UserDetailsController extends Controller
 {
-    public function getDetails(Request $r,$id){
-        $user = User::find($id);//select * from users where id
-        if(!$user){//checking for user
-            return response()->json(['status' => 400, Message => 'User Not Found'], 400);
-        }
-        else{
+    /**
+     * Get user details by user ID.
+     *
+     * @param int $userId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getUserDetails($userId)
+    {
+        try {
+            // Retrieve user details from the database
+            $user = User::findOrFail($userId);
+
+            // Return user details as JSON response
             return response()->json([
-                "data" => new UserResource($user),//call UserResource
-            ],200);
+                'success' => true,
+                'data' => $user,
+            ], 200);
+        } catch (\Exception $e) {
+            // Return error response if user is not found or any other error occurs
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load user details.',
+            ],400);
         }
     }
 }

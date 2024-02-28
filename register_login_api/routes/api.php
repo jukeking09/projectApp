@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 //Route For User Details
-Route::get('/details/{id}', [UserDetailsController::class, 'getDetails']);
+Route::get('/details/{id}', [UserDetailsController::class, 'getUserDetails']);
 
 //Routes For User Authentication
 

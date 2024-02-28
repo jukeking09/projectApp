@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:register_login/api.dart';
-
+import 'package:register_login/userid.dart';
+// import 'package:page_transition/page_transition.dart';
+int? userId; // Declare userId variable to store the retrieved user ID
 class HomePage extends StatefulWidget { 
   const HomePage({super.key}); 
   @override 
@@ -10,24 +12,21 @@ class HomePage extends StatefulWidget {
   
 class _HomePageState extends State<HomePage> { 
   int pageIndex = 0; 
-  late int userId;
-  late String email = ''; // Declare email variable
 
-@override
-void initState() {
-  super.initState();
-  
-  // Call getUserDetails function to fetch user details
-  ApiService.getUserDetails(userId).then((userData) {
-    // Extract email from the response
-    email = userData['email'];
-    // Update the state to rebuild the UI with the new email
+   @override
+  void initState() {
+    super.initState();
+    // Call getUserId method to retrieve user ID when the widget initializes
+    getUserId();
+  }
+   
+  Future<void> getUserId() async {
+    // Retrieve the user ID from shared preferences
+    userId = await UserIdStorage.getUserId();
+
+    // Set the state to trigger a rebuild and display the user ID
     setState(() {});
-  }).catchError((error) {
-    // Handle any errors that occur during the API call
-    print('Error fetching user details: $error');
-  });
-}
+  }
 
   @override 
   Widget build(BuildContext context) {
@@ -35,7 +34,7 @@ void initState() {
     const Page1(), 
     const Page2(), 
     const Page3(), 
-    Page4(email: email), 
+    Page4(), 
   ]; 
     return Scaffold( 
       
@@ -223,28 +222,32 @@ class Page3 extends StatelessWidget {
 } 
 
 class Page4 extends StatelessWidget {
-  // final int userId;
-  final String email;
-  
-  // const Page4({Key? key, required this.userId, required this.email});
-  const Page4({Key? key, required this.email});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(
-          child: Text('User Details')),
-        automaticallyImplyLeading: false,
+        title: Text('User Detail'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Text('User ID: $userId'),
-            Text('Email: $email'),
-          ],
-        ),
+      body: FutureBuilder<UserDetail>(
+        future: ApiService.getUserDetail(userId!),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('ID: ${snapshot.data!.id}'),
+                  Text('Email: ${snapshot.data!.email}'),
+                ],
+              ),
+            );
+          }
+        },
       ),
     );
   }
