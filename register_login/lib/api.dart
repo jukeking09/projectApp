@@ -1,26 +1,13 @@
 import 'dart:convert'; // Import the dart:convert library to use JSON encoding and decoding
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http; // Import the http package with a prefix `http` to avoid conflicts
-import 'package:register_login/userid.dart';
+// import 'package:register_login/userid.dart';
 import 'package:register_login/validate.dart'; // Import the validation functions from another file
 
-class UserDetail {
-  final int id; // Declare id field
-  final String email; // Declare email field
 
-  UserDetail({required this.id, required this.email}); // Constructor for UserDetail class
-
-  factory UserDetail.fromJson(Map<String, dynamic> json) { // Factory constructor to create a UserDetail object from a JSON map
-    return UserDetail( // Return a new UserDetail object
-      id: json['id'], // Assign id from JSON map
-      email: json['email'], // Assign email from JSON map
-    );
-  }
-}
 
 class ApiService {
   static const String baseUrl = 'http://10.0.2.2:8000/api'; // Define the base URL of the API
-
+  // int userId = UserIdStorage.getUserId() as int;
   // Function to register a user
   static Future<Map<String, dynamic>> registerUser(String email, String password,
       {required String route}) async {
@@ -73,30 +60,18 @@ class ApiService {
         'password': password,
       },
     );
-
-    // If the request is successful (status code 200), extract user ID and email from the response
-    if (response.statusCode == 200) {
-      final Map<String,dynamic> responseData = json.decode(response.body);
-      final int? id = responseData["id"];
-      await UserIdStorage.saveUserId(id!);
-
-      // Return the modified response data
-      return responseData;
-    } else {
-      // If the request is not successful, return a response with the status code and reason phrase
-      return {'status': response.statusCode, 'message': response.reasonPhrase};
-    }
+    return jsonDecode(response.body);
   } catch (e) {
     // Catch any errors and return a response with the error message
     return {'status': 500, 'message': 'Failed to login: $e'};
   }
 }
 
-  static Future<UserDetail> getUserDetail(int userId) async {
+   static Future<Map<String, dynamic>> getUserDetail(int userId) async {
     final response = await http.get(Uri.parse('$baseUrl/details/$userId')); // Send a GET request to the API endpoint with the provided user ID
 
     if (response.statusCode == 200) { // Check if the response status code is 200 (OK)
-      return UserDetail.fromJson(jsonDecode(response.body)); // If successful, decode the JSON response and create a UserDetail object
+      return jsonDecode(response.body); // If successful, return the JSON response
     } else {
       throw Exception('Failed to load user detail'); // If unsuccessful, throw an exception with an error message
     }

@@ -1,9 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:register_login/dashboard.dart';
 import 'package:register_login/login_page.dart';
 import 'package:register_login/api.dart';
 import 'package:register_login/splash.dart';
 import 'package:register_login/home.dart';
+
 
 
 void main() {
@@ -14,13 +16,14 @@ void main() {
       primarySwatch: Colors.red,
       scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255), // Change scaffold background color to red
     ),
-    initialRoute: '/splashscreen',
+    // initialRoute: '/splashscreen',
     // home: const HomePage(),
     routes: {
       '/': (context) => SplashScreen(),
       '/register': (context) => const Register(),
       '/login': (context) => const Login(),
       '/home': (context) => HomePage(),
+      '/dashboard': (context) => Dashboard(),
     },
   ));
 }

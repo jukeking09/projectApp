@@ -21,7 +21,7 @@ class UserDetailsController extends Controller
             // Return user details as JSON response
             return response()->json([
                 'success' => true,
-                'data' => $user,
+                'email' => $user->email,
             ], 200);
         } catch (\Exception $e) {
             // Return error response if user is not found or any other error occurs
