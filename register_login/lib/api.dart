@@ -1,7 +1,7 @@
-import 'dart:convert'; // Import the dart:convert library to use JSON encoding and decoding
-import 'package:http/http.dart' as http; // Import the http package with a prefix `http` to avoid conflicts
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 // import 'package:register_login/userid.dart';
-import 'package:register_login/validate.dart'; // Import the validation functions from another file
+import 'package:register_login/validate.dart'; 
 
 
 

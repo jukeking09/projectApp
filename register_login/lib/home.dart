@@ -1,12 +1,14 @@
 
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:register_login/api.dart';
+import 'package:register_login/style/buttonstyle.dart';
 import 'package:register_login/userid.dart';
 
 late int userId; // Declare userId as late, we'll initialize it in initState
 late String userEmail;
-
+final player=AudioPlayer();
 
 
 class HomePage extends StatefulWidget {
@@ -40,7 +42,7 @@ class _HomePageState extends State<HomePage> {
       const Page4(),
     ];
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(
@@ -52,7 +54,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 224, 3, 102),
+        backgroundColor: const Color.fromARGB(255, 224, 3, 102),
       ),
       body: pages[pageIndex],
       bottomNavigationBar: buildMyNavBar(context),
@@ -162,13 +164,13 @@ class Page1 extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('Lessons'),
+        title: const Text('Lessons'),
       ),
       body: GridView.count(
         crossAxisCount: 1, // Number of columns in the grid
         children: [
-          LessonCard(title: 'Lesson 1', subtitle: 'Basic Vocabulary'),
-          LessonCard(title: 'Lesson 2', subtitle: 'Grammar Essentials'),
+          const LessonCard(title: 'Lesson 1', subtitle: 'Basic Vocabulary'),
+          const LessonCard(title: 'Lesson 2', subtitle: 'Grammar Essentials'),
           // Add more LessonCard widgets for additional lessons
         ],
       ),
@@ -190,28 +192,28 @@ class LessonCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 3,
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       child: InkWell(
         onTap: () {
           // Add navigation to lesson details
         },
         child: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(40),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
                 subtitle,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   color: Colors.grey,
                 ),
@@ -226,20 +228,55 @@ class LessonCard extends StatelessWidget {
 
 class Page2 extends StatelessWidget {
   const Page2({Key? key}) : super(key: key);
-
+  
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color.fromARGB(255, 255, 255, 255),
-      child: Center(
-        child: Text(
-          "Page Number 2",
-          style: TextStyle(
-            color: Colors.red[900],
-            fontSize: 45,
-            fontWeight: FontWeight.w500,
+    return Scaffold(
+      body: GridView.count(
+        crossAxisCount: 4,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: MaterialButton(
+              enableFeedback: false,
+              // style: buttonAlphabet,
+              onPressed: () async{
+                await player.play(AssetSource('sounds/a a.m4a'));
+              },
+              child: Text('a'),
+            ),
           ),
-        ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              style: buttonAlphabet,
+              onPressed: () => {
+
+              },
+              child: Text('b'),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              style: buttonAlphabet,
+              onPressed: () => {
+
+              },
+              child: Text('k'),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              style: buttonAlphabet,
+              onPressed: () => {
+
+              },
+              child: Text('d'),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -273,39 +310,38 @@ class Page4 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('Dashboard')),
-        backgroundColor: Colors.blue[900],
+        title: const Center(child: Text('Dashboard')),
+        backgroundColor: Colors.grey,
         automaticallyImplyLeading: false,
       ),
       body: Container(
-        color: Colors.white, // Set background color to white
+        color: Colors.white,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               CircleAvatar(
-                backgroundColor: Colors.blue[900],
+                backgroundColor: Color.fromARGB(255, 224, 3, 102),
                 radius: 60,
-                child: Icon(
+                child: const Icon(
                   Icons.person,
                   color: Colors.white,
                   size: 60,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
-                "Welcome!", // Add a welcoming message
+                "Welcome!",
                 style: TextStyle(
-                  color: Colors.blue[900],
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  fontSize: 25,
                 ),
               ),
-              SizedBox(height: 20),
-              _buildUserDetail("User Email:", "user@example.com"), // Placeholder email
-              SizedBox(height: 10),
-              _buildUserDetail("User ID:", "12345"), // Placeholder user ID
-              SizedBox(height: 30),
+              const SizedBox(height: 20),
+              _buildUserDetail("User Email:", userEmail),
+              const SizedBox(height: 10),
+              _buildUserDetail("User ID:", "$userId"),
+              const SizedBox(height: 30),
               
             ],
           ),
@@ -321,15 +357,15 @@ class Page4 extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            color: Colors.blue[900],
+            color: Colors.black,
             fontSize: 20,
           ),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         Text(
           detail,
           style: TextStyle(
-            color: Colors.blue[900],
+            color: Colors.black,
             fontSize: 20,
           ),
         ),
