@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 // import 'dart:async';
-import 'package:register_login/main.dart';
+import 'package:register_login/register.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -11,6 +12,7 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
       splash: 'images/logo.png',
+      splashIconSize: double.infinity,
       nextScreen: Register(),
       splashTransition: SplashTransition.slideTransition,
       pageTransitionType: PageTransitionType.rightToLeft,

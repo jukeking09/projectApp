@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 final ButtonStyle buttonAlphabet = ElevatedButton.styleFrom(
   minimumSize: Size(10, 10),
+  enableFeedback: false,
   backgroundColor: Colors.grey,
   elevation: 0,
   shape: const RoundedRectangleBorder(

@@ -2,7 +2,7 @@
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:register_login/api.dart';
+import 'package:register_login/api/api.dart';
 import 'package:register_login/style/buttonstyle.dart';
 import 'package:register_login/userid.dart';
 
@@ -12,9 +12,10 @@ final player=AudioPlayer();
 
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 
@@ -30,7 +31,7 @@ class _HomePageState extends State<HomePage> {
     userId = await UserIdStorage.getUserId() as int; // Wait for the result
     final responseData = await ApiService.getUserDetail(userId);//get Data from Api
     userEmail = await responseData['email'];
-    print(userId);//test
+    // print(userId);//test
   }
 
   @override
@@ -157,7 +158,7 @@ class _HomePageState extends State<HomePage> {
 }
 
 class Page1 extends StatelessWidget {
-  const Page1({Key? key}) : super(key: key);
+  const Page1({super.key});
   
   @override
   Widget build(BuildContext context) {
@@ -168,9 +169,9 @@ class Page1 extends StatelessWidget {
       ),
       body: GridView.count(
         crossAxisCount: 1, // Number of columns in the grid
-        children: [
-          const LessonCard(title: 'Lesson 1', subtitle: 'Basic Vocabulary'),
-          const LessonCard(title: 'Lesson 2', subtitle: 'Grammar Essentials'),
+        children: const [
+          LessonCard(title: 'Lesson 1', subtitle: 'Basic Vocabulary'),
+          LessonCard(title: 'Lesson 2', subtitle: 'Grammar Essentials'),
           // Add more LessonCard widgets for additional lessons
         ],
       ),
@@ -183,10 +184,10 @@ class LessonCard extends StatelessWidget {
   final String subtitle;
 
   const LessonCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.subtitle,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -195,7 +196,7 @@ class LessonCard extends StatelessWidget {
       margin: const EdgeInsets.all(10),
       child: InkWell(
         onTap: () {
-          // Add navigation to lesson details
+          Navigator.pushNamed(context, '/lesson1');
         },
         child: Padding(
           padding: const EdgeInsets.all(40),
@@ -227,7 +228,7 @@ class LessonCard extends StatelessWidget {
 }
 
 class Page2 extends StatelessWidget {
-  const Page2({Key? key}) : super(key: key);
+  const Page2({super.key});
   
   @override
   Widget build(BuildContext context) {
@@ -236,44 +237,43 @@ class Page2 extends StatelessWidget {
         crossAxisCount: 4,
         children: [
           Padding(
-            padding: EdgeInsets.all(8.0),
-            child: MaterialButton(
-              enableFeedback: false,
-              // style: buttonAlphabet,
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(              
+              style: buttonAlphabet,
               onPressed: () async{
                 await player.play(AssetSource('sounds/a a.m4a'));
               },
-              child: Text('a'),
+              child: const Text('a'),
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
               style: buttonAlphabet,
-              onPressed: () => {
-
+              onPressed: () async {
+                await player.play(AssetSource('sounds/b.m4a'));
               },
-              child: Text('b'),
+              child: const Text('b'),
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
               style: buttonAlphabet,
-              onPressed: () => {
-
+              onPressed: () async {
+                await player.play(AssetSource('sounds/k.m4a'));
               },
-              child: Text('k'),
+              child: const Text('k'),
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
               style: buttonAlphabet,
-              onPressed: () => {
-
+              onPressed: () async {
+                await player.play(AssetSource('sounds/d.m4a'));
               },
-              child: Text('d'),
+              child: const Text('d'),
             ),
           ),
         ],
@@ -283,7 +283,7 @@ class Page2 extends StatelessWidget {
 }
 
 class Page3 extends StatelessWidget {
-  const Page3({Key? key}) : super(key: key);
+  const Page3({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -304,7 +304,7 @@ class Page3 extends StatelessWidget {
 }
 
 class Page4 extends StatelessWidget {
-  const Page4({Key? key}) : super(key: key);
+  const Page4({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -320,17 +320,17 @@ class Page4 extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              CircleAvatar(
+              const CircleAvatar(
                 backgroundColor: Color.fromARGB(255, 224, 3, 102),
                 radius: 60,
-                child: const Icon(
+                child: Icon(
                   Icons.person,
                   color: Colors.white,
                   size: 60,
                 ),
               ),
               const SizedBox(height: 20),
-              Text(
+              const Text(
                 "Welcome!",
                 style: TextStyle(
                   color: Colors.black,
@@ -356,7 +356,7 @@ class Page4 extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 20,
           ),
@@ -364,7 +364,7 @@ class Page4 extends StatelessWidget {
         const SizedBox(width: 10),
         Text(
           detail,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 20,
           ),

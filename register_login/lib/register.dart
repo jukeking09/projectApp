@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:register_login/api.dart';
+import 'package:register_login/api/api.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);

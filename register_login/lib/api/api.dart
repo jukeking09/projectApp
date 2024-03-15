@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-// import 'package:register_login/userid.dart';
 import 'package:register_login/validate.dart'; 
 
 
