@@ -103,12 +103,12 @@ class _HomePageState extends State<HomePage> {
             },
             icon: pageIndex == 1
                 ? const Icon(
-                    Icons.work_rounded,
+                    Icons.book_online,
                     color: Colors.white,
                     size: 35,
                   )
                 : const Icon(
-                    Icons.work_outline_outlined,
+                    Icons.book_online_outlined,
                     color: Colors.white,
                     size: 35,
                   ),
@@ -122,12 +122,12 @@ class _HomePageState extends State<HomePage> {
             },
             icon: pageIndex == 2
                 ? const Icon(
-                    Icons.widgets_rounded,
+                    Icons.leaderboard_rounded,
                     color: Colors.white,
                     size: 35,
                   )
                 : const Icon(
-                    Icons.widgets_outlined,
+                    Icons.leaderboard_outlined,
                     color: Colors.white,
                     size: 35,
                   ),
@@ -286,18 +286,34 @@ class Page3 extends StatelessWidget {
   const Page3({super.key});
 
   @override
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color.fromARGB(255, 255, 255, 255),
-      child: Center(
-        child: Text(
-          "Page Number 3",
-          style: TextStyle(
-          color: Colors.blue[900],
-          fontSize: 45,
-          fontWeight: FontWeight.w500,
-          ),
-        ),
+    // Sample data for the leaderboard
+    final List<Map<String, dynamic>> leaderboardData = [
+      {'username': 'User1', 'score': 1500},
+      {'username': 'User2', 'score': 1450},
+      {'username': 'User3', 'score': 1400},
+      {'username': 'User4', 'score': 1350},
+      {'username': 'User5', 'score': 1300},
+      // Add more users and scores as needed
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Leaderboard'),
+      ),
+      body: ListView.builder(
+        itemCount: leaderboardData.length,
+        itemBuilder: (context, index) {
+          final user = leaderboardData[index];
+          return ListTile(
+            leading: CircleAvatar(
+              child: Text('${index + 1}'), // Position in the leaderboard
+            ),
+            title: Text(user['username']),
+            trailing: Text('${user['score']}'),
+          );
+        },
       ),
     );
   }

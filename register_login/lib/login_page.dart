@@ -29,7 +29,12 @@ class _LoginState extends State<Login> {
       print('the token is $token and id is $userId');
       await UserIdStorage.saveUserId(userId);
       // ignore: use_build_context_synchronously
-      Navigator.pushReplacementNamed(context, '/home');
+      if(response['email'] == 'zach@gmail.com'){
+        Navigator.pushReplacementNamed(context, '/admindashboard');
+      }
+      else{
+        Navigator.pushReplacementNamed(context, '/home');
+      }
     } else {
       // ignore: use_build_context_synchronously
       showDialog(

@@ -44,7 +44,7 @@ class AuthController extends Controller {
         if($user && Hash::check($request->password, $user->password)){
             $token = $user->createToken('auth_token')->plainTextToken;
             $userId = $user->id;
-            $response=['status' => 200, 'token' => $token, 'user' => $user, 'message' => 'Successfully Logged In', 'userId' => $userId];
+            $response=['email'=> $request->email,'status' => 200, 'token' => $token, 'user' => $user, 'message' => 'Successfully Logged In', 'userId' => $userId];
             return response()->json($response);
         } elseif (!$user) {
             $response=['status' => 404, 'message' => 'No Account has been registered with this email'];

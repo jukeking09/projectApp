@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:register_login/api/lessonapi.dart';
 
-
 class LessonPage extends StatefulWidget {
   @override
   _LessonPageState createState() => _LessonPageState();
@@ -20,7 +19,7 @@ class _LessonPageState extends State<LessonPage> {
 
   Future<void> _fetchLessonContent() async {
     try {
-      String content = await _api.fetchLessonContent();
+      String content = await _api.fetchLessonContent(1);
       setState(() {
         _lessonContent = content;
         _isLoading = false;
@@ -46,9 +45,22 @@ class _LessonPageState extends State<LessonPage> {
           : Padding(
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
-                child: Text(
-                  _lessonContent,
-                  style: TextStyle(fontSize: 18.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _lessonContent,
+                      style: TextStyle(fontSize: 18.0),
+                      softWrap: true, // This ensures the text wraps to the next line
+                    ),
+                    SizedBox(height: 20.0), // Add some space between the text and button
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/quiz');
+                      },
+                      child: const Text('Start First Quiz'),
+                    ),
+                  ],
                 ),
               ),
             ),

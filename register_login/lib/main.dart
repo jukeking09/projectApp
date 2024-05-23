@@ -1,8 +1,13 @@
 // import 'package:flutter/gestures.dart';
+// import 'dart:js';
+
 import 'package:flutter/material.dart';
+import 'package:register_login/admindashboard.dart';
 import 'package:register_login/dashboard.dart';
 import 'package:register_login/lesson1.dart';
 import 'package:register_login/login_page.dart';
+import 'package:register_login/quiz.dart';
+import 'package:register_login/quiz1.dart';
 // import 'package:register_login/api/api.dart';
 import 'package:register_login/splash.dart';
 import 'package:register_login/home.dart';
@@ -27,6 +32,9 @@ void main() {
       '/home': (context) => HomePage(),
       '/dashboard': (context) => Dashboard(),
       '/lesson1':(context) => LessonPage(),
+      '/quiz':(context) => QuizListScreen(),
+      '/quiz1':(context) => QuestionListScreen(),
+      '/admindashboard':(context) => AdminDashboard()
     },
   ));
 }
