@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:register_login/model/language.dart';
+import 'package:register_login/model/lesson.dart';
 import 'package:register_login/validate.dart'; 
 
 
@@ -75,4 +77,44 @@ class ApiService {
       throw Exception('Failed to load user detail'); // If unsuccessful, throw an exception with an error message
     }
   }
+   static Future<List<Language>> fetchAvailableLanguages() async {
+    final response = await http.get(Uri.parse('http://10.0.2.2:8000/api/language'));
+    if (response.statusCode == 200) {
+      List jsonResponse = jsonDecode(response.body);
+      return jsonResponse.map((language) => Language.fromJson(language)).toList();
+    } else {
+      throw Exception('Failed to load languages');
+    }
+  }
+
+  static Future<void> saveUserLanguage(int userId, int languageId) async {
+
+
+  // Method to save the user's selected language
+    final response = await http.post(
+      Uri.parse('$baseUrl/savelanguage'),  // Make sure the URL is correct
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, int>{
+        'userId': userId,
+        'languageId': languageId,
+      }),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to save user language');
+    }
+  }
+  static Future<List<Lesson>> fetchLessons(int languageId) async {
+    final response = await http.get(Uri.parse('$baseUrl/getlessonsbylanguage/$languageId'));
+
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((lesson) => Lesson.fromJson(lesson)).toList();
+    } else {
+      throw Exception('Failed to load lessons');
+    }
+  }
 }
+

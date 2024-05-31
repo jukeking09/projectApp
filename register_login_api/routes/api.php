@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserDetailsController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\LanguageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,9 +28,15 @@ Route::get('/details/{id}', [UserDetailsController::class, 'getUserDetails']);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+//Routes for LangaugeController
+Route::get('/language', [LanguageController::class, 'getAvailableLanguages']);
+Route::post('/savelanguage', [LanguageController::class,'saveUserLanguage']);
+Route::get('/getlessonsbylanguage/{language_id}', [LanguageController::class, 'getLessonsByLanguage']);
+
 
 //Routes For Lesson Details
 Route::get('/lessons/{id}', [LessonController::class, 'getLessonDetails']);
+
 
 //Routes For GET Testings
 

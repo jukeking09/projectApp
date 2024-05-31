@@ -33,7 +33,8 @@ class _LoginState extends State<Login> {
         Navigator.pushReplacementNamed(context, '/admindashboard');
       }
       else{
-        Navigator.pushReplacementNamed(context, '/home');
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacementNamed(context, '/lspage');
       }
     } else {
       // ignore: use_build_context_synchronously
