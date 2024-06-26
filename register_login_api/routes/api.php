@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserDetailsController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\QuizController;
+use App\Http\Controllers\QuestionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +39,12 @@ Route::get('/getlessonsbylanguage/{language_id}', [LanguageController::class, 'g
 //Routes For Lesson Details
 Route::get('/lessons/{id}', [LessonController::class, 'getLessonDetails']);
 
+// Quizzes routes
+Route::get('/quizzes/{lesson_id}', [QuizController::class, 'getQuizByLessonId']);
+Route::get('/quizzes/{quiz_id}', [QuizController::class, 'show']);
 
+// Questions routes
+Route::get('/questions/{id}', [QuestionController::class, 'show']);
 //Routes For GET Testings
 
 Route::get('/hello', function () {

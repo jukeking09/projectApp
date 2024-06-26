@@ -7,9 +7,10 @@ import 'package:register_login/homepage2.dart';
 import 'package:register_login/language_select_page.dart';
 import 'package:register_login/lesson1.dart';
 import 'package:register_login/login_page.dart';
+import 'package:register_login/question_screen.dart';
 import 'package:register_login/quiz.dart';
 import 'package:register_login/quiz1.dart';
-// import 'package:register_login/api/api.dart';
+//import 'package:register_login/api/api.dart';
 import 'package:register_login/splash.dart';
 import 'package:register_login/home.dart';
 import 'package:register_login/register.dart';
@@ -36,9 +37,10 @@ void main() {
         ),
       '/home': (context) => const HomePage(),
       '/lesson1':(context) => LessonPage(),
-      '/quiz':(context) => QuizListScreen(),
-      '/quiz1':(context) => QuestionListScreen(),
-      '/admindashboard':(context) => AdminDashboard()
+      // '/quiz':(context) => QuizListScreen(),
+      // '/quiz1':(context) => QuizPage(),
+      '/admindashboard':(context) => AdminDashboard(),
+      '/questions':(context) => QuestionScreen()
     },
   ));
 }

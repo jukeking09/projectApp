@@ -89,7 +89,8 @@ class _HomePageState extends State<HomePage1> {
                 Lesson lesson = lessons[index];
                 return LessonCard(
                   title: lesson.title,
-                  subtitle: lesson.description,
+                  subtitle: lesson.description, 
+                  lessonId: lesson.id,
                 );
               },
             );
@@ -197,11 +198,13 @@ class _HomePageState extends State<HomePage1> {
 class LessonCard extends StatelessWidget {
   final String title;
   final String subtitle;
+  final int lessonId;
 
   const LessonCard({
     super.key,
     required this.title,
     required this.subtitle,
+    required this.lessonId,
   });
 
   @override
@@ -211,7 +214,11 @@ class LessonCard extends StatelessWidget {
       margin: const EdgeInsets.all(10),
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, '/lesson1');
+          Navigator.pushNamed(
+            context,
+            '/lesson1',
+            arguments: {'lessonId': lessonId},
+          );
         },
         child: Padding(
           padding: const EdgeInsets.all(40),
@@ -241,6 +248,7 @@ class LessonCard extends StatelessWidget {
     );
   }
 }
+
 
 class Page2 extends StatelessWidget {
   const Page2({super.key});

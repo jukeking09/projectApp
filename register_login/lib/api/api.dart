@@ -9,23 +9,19 @@ import 'package:register_login/validate.dart';
 class ApiService {
   static const String baseUrl = 'http://10.0.2.2:8000/api'; // Define the base URL of the API
   // int userId = UserIdStorage.getUserId() as int;
-  // Function to register a user
   static Future<Map<String, dynamic>> registerUser(String email, String password,
       {required String route}) async {
-    final url = Uri.parse('$baseUrl/register'); // Construct the URL for registration endpoint
+    final url = Uri.parse('$baseUrl/register'); 
 
-    // Validation for email and password
-    // Validate email and password using the imported functions
     final emailError = Validator.validateEmail(email);
-    if (emailError != null) { // If there's an error with the email, return a response with an error message
+    if (emailError != null) {
       return {'status': 400, 'message': emailError};
     }
     final passwordError = Validator.validatePassword(password);
-    if (passwordError != null) { // If there's an error with the password, return a response with an error message
+    if (passwordError != null) {
       return {'status': 400, 'message': passwordError};
     }
 
-    // Make a POST request to the registration endpoint with the provided email and password
     final response = await http.post(
       url,
       body: {
@@ -33,27 +29,31 @@ class ApiService {
         'password': password,
       },
     );
-
-    // Decode the response body from JSON format
-    return json.decode(response.body);
+    if (response.statusCode == 200) {
+      return {'status': 200, 'message': 'User registered successfully'};
+    } else if(response.statusCode == 400){
+      return {'status': 400, 'message': 'Account with email already exists'};
+    } else {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      return {'status': response.statusCode, 'message': responseData['message'] ?? 'Registration failed'};
+    }
+    //return json.decode(response.body);
   }
 
-  // Function to login a user
   static Future<Map<String, dynamic>> loginUser(String email, String password) async {
   final url = Uri.parse('$baseUrl/login'); // Construct the URL for login endpoint
 
   try {
-    // Validate email and password using the imported functions
     final emailError = Validator.validateEmail(email);
-    if (emailError != null) { // If there's an error with the email, return a response with an error message
+    if (emailError != null) { 
       return {'status': 400, 'message': emailError};
     }
     final passwordError = Validator.validatePassword(password);
-    if (passwordError != null) { // If there's an error with the password, return a response with an error message
+    if (passwordError != null) { 
       return {'status': 400, 'message': passwordError};
     }
 
-    // Make a POST request to the login endpoint with the provided email and password
+   
     final response = await http.post(
       url,
       body: {
@@ -63,18 +63,17 @@ class ApiService {
     );
     return jsonDecode(response.body);
   } catch (e) {
-    // Catch any errors and return a response with the error message
     return {'status': 500, 'message': 'Failed to login: $e'};
   }
 }
 
    static Future<Map<String, dynamic>> getUserDetail(int userId) async {
-    final response = await http.get(Uri.parse('$baseUrl/details/$userId')); // Send a GET request to the API endpoint with the provided user ID
+    final response = await http.get(Uri.parse('$baseUrl/details/$userId')); 
 
-    if (response.statusCode == 200) { // Check if the response status code is 200 (OK)
-      return jsonDecode(response.body); // If successful, return the JSON response
+    if (response.statusCode == 200) { 
+      return jsonDecode(response.body); 
     } else {
-      throw Exception('Failed to load user detail'); // If unsuccessful, throw an exception with an error message
+      throw Exception('Failed to load user detail'); 
     }
   }
    static Future<List<Language>> fetchAvailableLanguages() async {
@@ -90,9 +89,9 @@ class ApiService {
   static Future<void> saveUserLanguage(int userId, int languageId) async {
 
 
-  // Method to save the user's selected language
+ 
     final response = await http.post(
-      Uri.parse('$baseUrl/savelanguage'),  // Make sure the URL is correct
+      Uri.parse('$baseUrl/savelanguage'),  
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
