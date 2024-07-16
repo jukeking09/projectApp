@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:register_login/api/lessonapi.dart';
-import 'package:register_login/api/quizapi.dart';
-import 'package:register_login/model/lesson.dart';
 import 'package:register_login/model/quiz.dart';
 
 class LessonPage extends StatefulWidget {
@@ -62,16 +60,23 @@ class _LessonPageState extends State<LessonPage> {
     }
   }
 
+  void _navigateToPronunciationPage() {
+    if (_lessonId == 3) {
+      Navigator.pushNamed(context, '/pronunciation1');
+    } else {
+      Navigator.pushNamed(context, '/pronunciation2');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text('Lesson'),
-         centerTitle: true,
+        centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 224, 3, 102),
       ),
-      
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : Padding(
@@ -95,6 +100,11 @@ class _LessonPageState extends State<LessonPage> {
                       )
                     else
                       Text('No quiz available for this lesson'),
+                    SizedBox(height: 20.0),
+                    ElevatedButton(
+                      onPressed: _navigateToPronunciationPage,
+                      child: Text('Pronunciation'),
+                    ),
                   ],
                 ),
               ),

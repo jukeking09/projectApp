@@ -45,4 +45,19 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Language::class, 'user_languages', 'user_id', 'language_id');
     }
+    public function quizScores()
+    {
+        return $this->hasMany(QuizScore::class);
+    }
+
+    public function getUserProgress($userId)
+{
+    $lessons = Lesson::with(['quizzes' => function ($query) use ($userId) {
+        $query->whereHas('userQuizzes', function ($query) use ($userId) {
+            $query->where('user_id', $userId)->where('is_completed', true);
+        });
+    }])->get();
+
+    return response()->json($lessons);
+}
 }

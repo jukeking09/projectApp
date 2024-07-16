@@ -1,25 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:register_login/api/api.dart';
-import 'package:register_login/home.dart';
+import 'package:register_login/dailystreaks.dart';
+// import 'package:register_login/home.dart';
+import 'package:register_login/model/leaderboard.dart';
 import 'package:register_login/model/lesson.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:register_login/style/buttonstyle.dart';
 import 'package:register_login/userid.dart';
-
+late int userId;
+late String userEmail;
+final player=AudioPlayer();
 class HomePage1 extends StatefulWidget {
   final int languageId;
 
   const HomePage1({super.key, required this.languageId});
 
   @override
-  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage1> {
   late Future<List<Lesson>> futureLessons;
   int pageIndex = 0;
-
+  int userId = 0;
+  String userEmail = '';
+  
   @override
   void initState() {
     super.initState();
@@ -31,6 +36,12 @@ class _HomePageState extends State<HomePage1> {
     userId = (await UserIdStorage.getUserId())!;
     final responseData = await ApiService.getUserDetail(userId);
     userEmail = responseData['email'];
+    await _updateStreak();
+  }
+
+  Future<void> _updateStreak() async {
+    StreakManager streakManager = StreakManager(userId);
+    await streakManager.updateStreakAfterLogin();
   }
 
   @override
@@ -89,7 +100,7 @@ class _HomePageState extends State<HomePage1> {
                 Lesson lesson = lessons[index];
                 return LessonCard(
                   title: lesson.title,
-                  subtitle: lesson.description, 
+                  subtitle: lesson.description,
                   lessonId: lesson.id,
                 );
               },
@@ -249,7 +260,6 @@ class LessonCard extends StatelessWidget {
   }
 }
 
-
 class Page2 extends StatelessWidget {
   const Page2({super.key});
   
@@ -261,9 +271,9 @@ class Page2 extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(              
+            child: ElevatedButton(
               style: buttonAlphabet,
-              onPressed: () async{
+              onPressed: () async {
                 await player.play(AssetSource('sounds/a a.m4a'));
               },
               child: const Text('a'),
@@ -305,45 +315,92 @@ class Page2 extends StatelessWidget {
   }
 }
 
-class Page3 extends StatelessWidget {
+class Page3 extends StatefulWidget {
   const Page3({super.key});
 
   @override
+  _Page3State createState() => _Page3State();
+}
+
+class _Page3State extends State<Page3> {
+  late Future<List<LeaderboardEntry>> leaderboardDataFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    leaderboardDataFuture = ApiService.fetchLeaderboard();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Sample data for the leaderboard
-    final List<Map<String, dynamic>> leaderboardData = [
-      {'username': 'User1', 'score': 1500},
-      {'username': 'User2', 'score': 1450},
-      {'username': 'User3', 'score': 1400},
-      {'username': 'User4', 'score': 1350},
-      {'username': 'User5', 'score': 1300},
-      // Add more users and scores as needed
-    ];
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Leaderboard'),
+        title: const Text('Leaderboard'),
       ),
-      body: ListView.builder(
-        itemCount: leaderboardData.length,
-        itemBuilder: (context, index) {
-          final user = leaderboardData[index];
-          return ListTile(
-            leading: CircleAvatar(
-              child: Text('${index + 1}'), // Position in the leaderboard
-            ),
-            title: Text(user['username']),
-            trailing: Text('${user['score']}'),
-          );
+      body: FutureBuilder<List<LeaderboardEntry>>(
+        future: leaderboardDataFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No leaderboard data available'));
+          } else {
+            List<LeaderboardEntry> leaderboardData = snapshot.data!;
+            return ListView.builder(
+              itemCount: leaderboardData.length,
+              itemBuilder: (context, index) {
+                final entry = leaderboardData[index];
+                return ListTile(
+                  leading: CircleAvatar(
+                    child: Text('${index + 1}'),
+                  ),
+                  title: Text(entry.email),
+                  trailing: Text('${entry.score}'),
+                );
+              },
+            );
+          }
         },
       ),
     );
   }
 }
 
-class Page4 extends StatelessWidget {
+class Page4 extends StatefulWidget {
+
   const Page4({super.key});
+
+  @override
+  _Page4State createState() => _Page4State();
+}
+
+class _Page4State extends State<Page4> {
+  int streak = 0; // Placeholder for streak count
+  String userEmail = ''; // Placeholder for user email
+  int userId=0;
+  @override
+  void initState() {
+    super.initState();
+    _loadUserDetails();
+  }
+
+  _loadUserDetails() async {
+    userId = (await UserIdStorage.getUserId())!;
+    final responseData = await ApiService.getUserDetail(userId);
+    userEmail = responseData['email'];
+    await _loadStreak(userId);
+  }
+
+  Future<void> _loadStreak(int userId) async {
+    StreakManager streakManager = StreakManager(userId);
+    int savedStreak = await streakManager.getStreak();
+
+    setState(() {
+      streak = savedStreak;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -380,8 +437,9 @@ class Page4 extends StatelessWidget {
               _buildUserDetail("User Email:", userEmail),
               const SizedBox(height: 10),
               _buildUserDetail("User ID:", "$userId"),
+              const SizedBox(height: 10),
+              _buildUserDetail("Streak:", "$streak"), // Display streak here
               const SizedBox(height: 30),
-              
             ],
           ),
         ),

@@ -10,9 +10,32 @@ use Illuminate\Support\Facades\Auth;
 
 class LanguageController extends Controller
 {
+    public function store(Request $request)
+    {
+        // Validate the request data
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        // Create the language
+        $language = Language::create([
+            'name' => $validated['name'],
+        ]);
+
+        // Return a success response
+        return response()->json([
+            'status' => 200,
+            'message' => 'Language added successfully',
+            'language' => $language,
+        ]);
+    }
     public function getAvailableLanguages()
     {
         $languages = Language::all();
+        return response()->json($languages);
+    }
+    public function getUserLanguages($userid){
+        $languages = UserLanguage::where("user_id", $userid)->get()->all();
         return response()->json($languages);
     }
 

@@ -1,11 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:register_login/api/api.dart';
+import 'package:register_login/dailystreaks.dart';
 import 'package:register_login/tokens.dart';
 import 'package:register_login/userid.dart';
-
-
-
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -17,7 +15,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  
+
   void loginUser() async {
     final email = _emailController.text;
     final password = _passwordController.text;
@@ -28,6 +26,10 @@ class _LoginState extends State<Login> {
       int userId = response['userId'];
       print('the token is $token and id is $userId');
       await UserIdStorage.saveUserId(userId);
+      
+      StreakManager streakManager = StreakManager(userId); // Create an instance of StreakManager
+      await streakManager.updateStreakAfterLogin();
+
       // ignore: use_build_context_synchronously
       if(response['email'] == 'zach@gmail.com'){
         Navigator.pushReplacementNamed(context, '/admindashboard');
@@ -55,13 +57,14 @@ class _LoginState extends State<Login> {
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Color.fromARGB(255, 224, 3, 102),
+        backgroundColor: const Color.fromARGB(255, 224, 3, 102),
         elevation: 0,
         title: const Text('Login'),
       ),
@@ -83,7 +86,7 @@ class _LoginState extends State<Login> {
                 hintStyle: const TextStyle(color: Colors.grey),
                 prefixIcon: const Icon(Icons.email, color: Colors.white),
                 filled: true,
-                fillColor: Color.fromARGB(219, 106, 103, 103),
+                fillColor: const Color.fromARGB(219, 106, 103, 103),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30.0),
                   borderSide: BorderSide.none,
@@ -100,7 +103,7 @@ class _LoginState extends State<Login> {
                 hintStyle: const TextStyle(color: Colors.grey),
                 prefixIcon: const Icon(Icons.lock, color: Colors.white),
                 filled: true,
-                fillColor: Color.fromARGB(219, 106, 103, 103),
+                fillColor: const Color.fromARGB(219, 106, 103, 103),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30.0),
                   borderSide: BorderSide.none,

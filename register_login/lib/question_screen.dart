@@ -56,7 +56,17 @@ class _QuestionScreenState extends State<QuestionScreen> {
         _currentQuestionIndex++;
       });
     } else {
+      _sendQuizScore();
+    }
+  }
+
+  Future<void> _sendQuizScore() async {
+    try {
+      await _api.sendQuizScore(_quizId,_score);
       _showQuizResult();
+    } catch (e) {
+      print('Failed to send quiz score: $e');
+      _showErrorDialog();
     }
   }
 
@@ -70,8 +80,29 @@ class _QuestionScreenState extends State<QuestionScreen> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop(); // Assuming this pops back to previous screen
+                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop(); // Go back to the previous screen
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showErrorDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text('Failed to send quiz score. Please try again.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop(); 
               },
               child: Text('OK'),
             ),
@@ -123,7 +154,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                                   child: Text(choice),
                                 ),
                               );
-                            }).toList(),
+                            })
                           ],
                         ),
                       ),

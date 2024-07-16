@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:register_login/model/alphabet.dart';
+import 'package:register_login/model/completion.dart';
 import 'package:register_login/model/language.dart';
+import 'package:register_login/model/leaderboard.dart';
 import 'package:register_login/model/lesson.dart';
 import 'package:register_login/validate.dart'; 
 
@@ -115,5 +118,48 @@ class ApiService {
       throw Exception('Failed to load lessons');
     }
   }
+  static Future<List<LeaderboardEntry>> fetchLeaderboard() async {
+    final response = await http.get(Uri.parse('$baseUrl/leaderboard'));
+
+    if (response.statusCode == 200) {
+      Iterable jsonList = jsonDecode(response.body);
+      return jsonList.map((entry) => LeaderboardEntry.fromJson(entry)).toList();
+    } else {
+      throw Exception('Failed to load leaderboard');
+    }
+  }
+  static Future<List<LessonWithCompletion>> fetchLessonsWithCompletionStatus(int languageId, int userId) async {
+    final response = await http.get(Uri.parse('$baseUrl/lessons?languageId=$languageId&userId=$userId'));
+
+    if (response.statusCode == 200) {
+        try {
+            final List<dynamic> jsonResponse = jsonDecode(response.body);
+            print(response.body);
+            return jsonResponse.map((json) => LessonWithCompletion.fromJson(json)).toList();
+        } catch (e) {
+            print('Error parsing lessons JSON: $e');
+            throw Exception('Failed to parse lessons');
+        }
+    } else {
+        print('Error fetching lessons: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        throw Exception('Failed to load lessons');
+    }
+}
+   static Future<List<Alphabet>> fetchAlphabets(int languageId) async {
+    final response = await http.get(Uri.parse('$baseUrl/alphabets/$languageId'));
+    print(response.body);
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => Alphabet.fromJson(data)).toList();
+    } else {
+      throw Exception('Failed to load alphabets');
+    }
+  }
+  static fetchLessonDetails(int userId, int languageId) {}
+
+  static fetchLanguagesByUserId(int userId) {}
+
+
 }
 

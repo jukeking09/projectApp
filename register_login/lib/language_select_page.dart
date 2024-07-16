@@ -21,7 +21,7 @@ class _LanguageSelectionPageState extends State<LanguageSelectionPage> {
   int? userId = await UserIdStorage.getUserId();
   await ApiService.saveUserLanguage(userId!, language.id);
   // ignore: use_build_context_synchronously
-  Navigator.pushReplacementNamed(
+  Navigator.pushNamed(
     context,
     '/home1',
     arguments: language.id, // Pass the language ID directly

@@ -10,14 +10,14 @@ class QuizzesTableSeeder extends Seeder
     public function run()
     {
         Quiz::create([
-            'lesson_id' => 2,
-            'title' => 'Quiz 2',
-            'description' => 'Description of Quiz 2',
+            'lesson_id' => 3,
+            'title' => 'Quiz 3',
+            'description' => 'Basic Greetings',
         ]);
         Quiz::create([
-            'lesson_id' => 2,
-            'title' => 'Quiz 3',
-            'description' => 'Description of Quiz 3',
+            'lesson_id' => 3,
+            'title' => 'Quiz 4',
+            'description' => 'More Basic Greetings',
         ]);
 
         // Add more quizzes as needed

@@ -14,6 +14,7 @@ class Lesson extends Model
     protected $fillable = [
         'title',
         'content',
+        'description',
         'language_id',
     ];
 
@@ -25,5 +26,13 @@ class Lesson extends Model
     public function quizzes()
     {
         return $this->hasMany(Quiz::class);
+    }
+    public function audios()
+    {
+        return $this->hasMany(Audio::class);
+    }
+    public function quizScores()
+    {
+        return $this->hasMany(QuizScore::class);
     }
 }
